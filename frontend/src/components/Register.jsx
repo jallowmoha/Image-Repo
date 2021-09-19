@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,6 +12,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+import { useHistory } from 'react-router-dom'
+
+import  axiosInstance  from './Api'
 
 function Copyright(props) {
   return (
@@ -29,16 +33,45 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
+  let history = useHistory()
+  const login = () => {
+    history.push('/login')
+  }
+  const initialFormData = Object.freeze({
+    email: '',
+    username: '',
+    password: '',
+  });
+  const [formData, setFormData] = useState(initialFormData)
+  
+  const handleChange = (event) => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value.trim()
+    })
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+  
+    console.log(formData);
+
+    axiosInstance.post('register/', {
+      email: formData.email,
+      username: formData.username,
+      password: formData.password,
+    })
+      .then((response) => {
+        history.push('/login');
+        console.log(response.data)
+        console.log(response)
+
+    } )
   };
 
+   
+
+  
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -59,7 +92,7 @@ export default function SignUp() {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-             
+            
               <Grid item xs={12}>
                 <TextField
                   required
@@ -68,8 +101,25 @@ export default function SignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                   onChange={handleChange}
+                  
+                  
                 />
               </Grid>
+               <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="username"
+                  label="Username"
+                  name="username"
+                  autoComplete="username"
+                   onChange={handleChange}
+                  
+                  
+                />
+                 </Grid>
+            
               <Grid item xs={12}>
                 <TextField
                   required
@@ -79,6 +129,7 @@ export default function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -89,18 +140,20 @@ export default function SignUp() {
               </Grid>
             </Grid>
             <Button
+           
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onClick={handleSubmit}
             >
               Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Button  onClick={login}  variant="body2">
                   Already have an account? Sign in
-                </Link>
+                </Button>
               </Grid>
             </Grid>
           </Box>
