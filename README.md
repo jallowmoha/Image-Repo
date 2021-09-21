@@ -4,8 +4,7 @@ This is my implementation of the image reposistory challenge using Django and Dj
 
 How to locally run the project:
  
-1) git clone https://github.com/jallowmoha/Shopiy-Backend-Challenge/tree/master
-
+1) git clone 
 2) CD into project directory.
 
 3) Activate your virtual env.
