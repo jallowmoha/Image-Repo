@@ -1,4 +1,4 @@
-# Shopiy-Backend-Challenge
+# Image Repo
 
 This is my implementation of the image reposistory challenge using Django and Django Rest Framework. 
 
